@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basics of C Programming — ScholarNest</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sn-navy: #0D1B2A;
+    --sn-blue: #1B4F8A;
+    --sn-sky: #2D8CCA;
+    --sn-gold: #E8A020;
+    --sn-green: #1A7A4A;
+    --sn-light: #F4F7FB;
+    --sn-white: #FFFFFF;
+    --sn-gray: #6B7280;
+    --sn-border: #E2E8F0;
+    --sn-dark-bg: #0F172A;
+    --sn-code-bg: #1E293B;
+    --sn-red: #DC2626;
+    --sn-purple: #7C3AED;
+    --sn-teal: #0D9488;
+    --sn-orange: #EA7700;
+    --radius: 10px;
+    --shadow: 0 2px 16px rgba(13,27,42,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--sn-light);
+    color: var(--sn-navy);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--sn-navy);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 62px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--sn-sky), var(--sn-gold));
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: -1px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .logo-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.3px;
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    color: var(--sn-gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .header-title {
+    margin-left: auto;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-badge {
+    background: var(--sn-sky);
+    color: white;
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 0;
+    min-height: calc(100vh - 62px);
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: white;
+    border-right: 1px solid var(--sn-border);
+    position: sticky;
+    top: 62px;
+    height: calc(100vh - 62px);
+    overflow-y: auto;
+    padding: 1.5rem 0;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--sn-border); border-radius: 4px; }
+
+  .sidebar-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--sn-gray);
+    padding: 0.75rem 1.25rem 0.35rem;
+    margin-top: 0.5rem;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 1.25rem;
+    font-size: 13.5px;
+    color: var(--sn-navy);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .sidebar-link:hover {
+    background: var(--sn-light);
+    color: var(--sn-sky);
+    border-left-color: var(--sn-sky);
+  }
+
+  .sidebar-link.active {
+    background: #EEF6FF;
+    color: var(--sn-sky);
+    border-left-color: var(--sn-sky);
+    font-weight: 600;
+  }
+
+  .sidebar-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sn-sky);
+    background: #EEF6FF;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    padding: 2.5rem 3rem;
+    max-width: 900px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--sn-navy) 0%, #1B4F8A 60%, #2D8CCA 100%);
+    border-radius: 16px;
+    padding: 2.5rem 2.5rem;
+    color: white;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '</>';
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 96px;
+    font-weight: 700;
+    opacity: 0.07;
+    color: white;
+    line-height: 1;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--sn-gold);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.8);
+    max-width: 480px;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 1.25rem;
+  }
+
+  .hero-tag {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.2);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 3rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--sn-border);
+  }
+
+  .section-num {
+    background: var(--sn-sky);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--sn-navy);
+  }
+
+  .section h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--sn-blue);
+    margin: 1.5rem 0 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section h3::before {
+    content: '';
+    width: 4px;
+    height: 18px;
+    background: var(--sn-sky);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .section p {
+    color: #374151;
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── CODE BLOCKS ── */
+  .code-block {
+    background: var(--sn-code-bg);
+    border-radius: var(--radius);
+    margin: 1rem 0;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .code-header {
+    background: rgba(255,255,255,0.05);
+    padding: 8px 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .code-lang {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sn-gold);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .code-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  pre {
+    padding: 1.1rem 1.25rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #CBD5E1;
+  }
+
+  .kw  { color: #C792EA; }
+  .fn  { color: #82AAFF; }
+  .str { color: #C3E88D; }
+  .num { color: #F78C6C; }
+  .cmt { color: #546E7A; font-style: italic; }
+  .inc { color: #89DDFF; }
+  .op  { color: #89DDFF; }
+  .typ { color: #FFCB6B; }
+
+  /* ── OUTPUT BLOCK ── */
+  .output-block {
+    background: #0F1923;
+    border: 1px solid rgba(45,140,202,0.3);
+    border-radius: var(--radius);
+    margin: 0.5rem 0 1rem;
+    overflow: hidden;
+  }
+
+  .output-header {
+    background: rgba(45,140,202,0.12);
+    padding: 6px 1rem;
+    font-size: 11px;
+    color: var(--sn-sky);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(45,140,202,0.2);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .output-block pre {
+    color: #A8D8A8;
+    font-size: 13px;
+    padding: 0.75rem 1.25rem;
+  }
+
+  /* ── INFO BOXES ── */
+  .info-box {
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    display: flex;
+    gap: 12px;
+  }
+
+  .info-box.note {
+    background: #EEF6FF;
+    border-left: 4px solid var(--sn-sky);
+  }
+
+  .info-box.warning {
+    background: #FFFBEB;
+    border-left: 4px solid #F59E0B;
+  }
+
+  .info-box.tip {
+    background: #F0FDF4;
+    border-left: 4px solid var(--sn-green);
+  }
+
+  .info-box.danger {
+    background: #FEF2F2;
+    border-left: 4px solid var(--sn-red);
+  }
+
+  .info-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  .info-box p { color: #374151; margin: 0; font-size: 14px; }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; border-radius: var(--radius); border: 1px solid var(--sn-border); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+
+  th {
+    background: var(--sn-navy);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+
+  td { padding: 9px 14px; border-bottom: 1px solid var(--sn-border); color: #374151; vertical-align: top; }
+
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #F8FAFC; }
+
+  td code, th code {
+    background: #EEF2FF;
+    color: var(--sn-purple);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* ── INLINE CODE ── */
+  p code, li code {
+    background: #EEF2FF;
+    color: var(--sn-purple);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  /* ── LISTS ── */
+  ul, ol {
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: #374151;
+  }
+
+  li { margin-bottom: 4px; }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .card {
+    background: white;
+    border: 1px solid var(--sn-border);
+    border-radius: var(--radius);
+    padding: 1.1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .card-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--sn-navy);
+    margin-bottom: 4px;
+  }
+
+  .card p { font-size: 13px; color: var(--sn-gray); margin: 0; }
+
+  /* ── FLOWCHART (SVG) ── */
+  .diagram-wrap {
+    background: white;
+    border: 1px solid var(--sn-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+
+  .diagram-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sn-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .diagram-title::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: var(--sn-sky);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  svg text { font-family: 'Inter', sans-serif; }
+
+  /* ── TWO COL LAYOUT ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  /* ── OPERATOR BADGE ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    background: #EEF2FF;
+    color: var(--sn-purple);
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 3px 10px;
+    margin: 2px;
+  }
+
+  /* ── BACK TO TOP ── */
+  .section-anchor { scroll-margin-top: 80px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .main { padding: 1.5rem; }
+    .two-col { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">SN</div>
+      <div class="logo-text">
+        <span class="logo-name">ScholarNest</span>
+        <span class="logo-sub">Learn · Explore · Grow</span>
+      </div>
+    </a>
+    <div class="header-title">
+      <span>Basics of C Programming</span>
+      <span class="header-badge">Study Notes</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section-label">Contents</div>
+    <a href="#intro" class="sidebar-link active"><span class="sidebar-num">1</span> Introduction to C</a>
+    <a href="#structure" class="sidebar-link"><span class="sidebar-num">2</span> Program Structure</a>
+    <a href="#datatypes" class="sidebar-link"><span class="sidebar-num">3</span> Data Types</a>
+    <a href="#variables" class="sidebar-link"><span class="sidebar-num">4</span> Variables & Constants</a>
+    <a href="#operators" class="sidebar-link"><span class="sidebar-num">5</span> Operators</a>
+    <a href="#io" class="sidebar-link"><span class="sidebar-num">6</span> Input & Output</a>
+    <a href="#conditionals" class="sidebar-link"><span class="sidebar-num">7</span> Conditionals</a>
+    <a href="#loops" class="sidebar-link"><span class="sidebar-num">8</span> Loops</a>
+    <a href="#arrays" class="sidebar-link"><span class="sidebar-num">9</span> Arrays</a>
+    <a href="#strings" class="sidebar-link"><span class="sidebar-num">10</span> Strings</a>
+    <a href="#functions" class="sidebar-link"><span class="sidebar-num">11</span> Functions</a>
+    <a href="#pointers" class="sidebar-link"><span class="sidebar-num">12</span> Pointers</a>
+    <a href="#structures" class="sidebar-link"><span class="sidebar-num">13</span> Structures</a>
+    <a href="#fileio" class="sidebar-link"><span class="sidebar-num">14</span> File I/O</a>
+    <div class="sidebar-section-label">Diagrams</div>
+    <a href="#intro" class="sidebar-link" style="font-size:12.5px; padding-left:2rem;">▸ Compilation Flow</a>
+    <a href="#conditionals" class="sidebar-link" style="font-size:12.5px; padding-left:2rem;">▸ if-else Flowchart</a>
+    <a href="#loops" class="sidebar-link" style="font-size:12.5px; padding-left:2rem;">▸ Loop Flowcharts</a>
+    <a href="#pointers" class="sidebar-link" style="font-size:12.5px; padding-left:2rem;">▸ Memory Diagram</a>
+    <a href="#functions" class="sidebar-link" style="font-size:12.5px; padding-left:2rem;">▸ Call Stack</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-eyebrow">ScholarNest Study Notes</div>
+      <h1>Basics of C Programming</h1>
+      <p>A complete, example-driven guide to learning C — from your first "Hello, World!" to pointers, structures, and file I/O.</p>
+      <div class="hero-tags">
+        <span class="hero-tag">#include</span>
+        <span class="hero-tag">int main()</span>
+        <span class="hero-tag">printf()</span>
+        <span class="hero-tag">pointers</span>
+        <span class="hero-tag">struct</span>
+        <span class="hero-tag">file I/O</span>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 1. INTRODUCTION -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="intro">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2>Introduction to C</h2>
+      </div>
+
+      <p>C is a general-purpose, procedural programming language developed by <strong>Dennis Ritchie</strong> at Bell Labs in <strong>1972</strong>. It is the mother language of many modern languages — C++, Java, Python, and JavaScript all draw from C's design.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h4>Fast & Efficient</h4>
+          <p>Compiles directly to machine code with minimal overhead.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔧</div>
+          <h4>Low-Level Control</h4>
+          <p>Direct memory management via pointers.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <h4>Portable</h4>
+          <p>Write once, compile anywhere — ANSI C standard.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏗️</div>
+          <h4>Foundation</h4>
+          <p>Linux kernel, databases, and OS kernels are written in C.</p>
+        </div>
+      </div>
+
+      <h3>How a C Program Runs — Compilation Flow</h3>
+
+      <div class="diagram-wrap">
+        <div class="diagram-title">C Compilation & Execution Pipeline</div>
+        <svg width="100%" viewBox="0 0 760 220" role="img" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#2D8CCA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <!-- Step boxes -->
+          <!-- Source Code -->
+          <rect x="20" y="80" width="110" height="60" rx="10" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.5"/>
+          <text x="75" y="104" text-anchor="middle" font-size="13" font-weight="600" fill="#0D1B2A">Source</text>
+          <text x="75" y="120" text-anchor="middle" font-size="11" fill="#6B7280">program.c</text>
+          <text x="75" y="136" text-anchor="middle" font-size="11" fill="#2D8CCA" font-family="'JetBrains Mono'">.c file</text>
+
+          <!-- Arrow 1 -->
+          <line x1="130" y1="110" x2="162" y2="110" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#arr)"/>
+          <text x="146" y="104" text-anchor="middle" font-size="10" fill="#6B7280">gcc</text>
+
+          <!-- Preprocessor -->
+          <rect x="165" y="80" width="110" height="60" rx="10" fill="#F0FDF4" stroke="#1A7A4A" stroke-width="1.5"/>
+          <text x="220" y="104" text-anchor="middle" font-size="13" font-weight="600" fill="#0D1B2A">Preprocessor</text>
+          <text x="220" y="120" text-anchor="middle" font-size="11" fill="#6B7280">Expand macros</text>
+          <text x="220" y="136" text-anchor="middle" font-size="11" fill="#1A7A4A" font-family="'JetBrains Mono'">#include</text>
+
+          <!-- Arrow 2 -->
+          <line x1="275" y1="110" x2="307" y2="110" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#arr)"/>
+
+          <!-- Compiler -->
+          <rect x="310" y="80" width="110" height="60" rx="10" fill="#FFF7ED" stroke="#EA7700" stroke-width="1.5"/>
+          <text x="365" y="104" text-anchor="middle" font-size="13" font-weight="600" fill="#0D1B2A">Compiler</text>
+          <text x="365" y="120" text-anchor="middle" font-size="11" fill="#6B7280">Translate to</text>
+          <text x="365" y="136" text-anchor="middle" font-size="11" fill="#EA7700" font-family="'JetBrains Mono'">Assembly</text>
+
+          <!-- Arrow 3 -->
+          <line x1="420" y1="110" x2="452" y2="110" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#arr)"/>
+
+          <!-- Assembler -->
+          <rect x="455" y="80" width="110" height="60" rx="10" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5"/>
+          <text x="510" y="104" text-anchor="middle" font-size="13" font-weight="600" fill="#0D1B2A">Assembler</text>
+          <text x="510" y="120" text-anchor="middle" font-size="11" fill="#6B7280">To object</text>
+          <text x="510" y="136" text-anchor="middle" font-size="11" fill="#7C3AED" font-family="'JetBrains Mono'">.o file</text>
+
+          <!-- Arrow 4 -->
+          <line x1="565" y1="110" x2="597" y2="110" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#arr)"/>
+
+          <!-- Linker -->
+          <rect x="600" y="80" width="110" height="60" rx="10" fill="#0D1B2A" stroke="#2D8CCA" stroke-width="1.5"/>
+          <text x="655" y="104" text-anchor="middle" font-size="13" font-weight="600" fill="white">Linker +</text>
+          <text x="655" y="120" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.7)">Executable</text>
+          <text x="655" y="136" text-anchor="middle" font-size="11" fill="#E8A020" font-family="'JetBrains Mono'">a.out / .exe</text>
+
+          <!-- Phase labels below -->
+          <text x="75" y="172" text-anchor="middle" font-size="11" fill="#6B7280">① Source</text>
+          <text x="220" y="172" text-anchor="middle" font-size="11" fill="#6B7280">② Expand</text>
+          <text x="365" y="172" text-anchor="middle" font-size="11" fill="#6B7280">③ Translate</text>
+          <text x="510" y="172" text-anchor="middle" font-size="11" fill="#6B7280">④ Assemble</text>
+          <text x="655" y="172" text-anchor="middle" font-size="11" fill="#6B7280">⑤ Link &amp; Run</text>
+        </svg>
+      </div>
+
+      <div class="info-box note">
+        <span class="info-icon">💡</span>
+        <p>Use <code>gcc program.c -o program</code> to compile. Then <code>./program</code> to run (Linux/Mac) or <code>program.exe</code> on Windows.</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 2. PROGRAM STRUCTURE -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="structure">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2>Program Structure</h2>
+      </div>
+
+      <p>Every C program follows a defined structure. Understanding this skeleton is the first step to writing any program.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Anatomy of a C Program</span></div>
+        <pre><span class="cmt">/* ① Header Files — include library functions */</span>
+<span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>    <span class="cmt">// Standard I/O</span>
+<span class="inc">#include</span> <span class="str">&lt;stdlib.h&gt;</span>   <span class="cmt">// Memory allocation, exit()</span>
+<span class="inc">#include</span> <span class="str">&lt;string.h&gt;</span>   <span class="cmt">// String functions</span>
+<span class="inc">#include</span> <span class="str">&lt;math.h&gt;</span>     <span class="cmt">// Mathematical functions</span>
+
+<span class="cmt">/* ② Global Declarations (visible to all functions) */</span>
+<span class="typ">int</span> globalVar <span class="op">=</span> <span class="num">10</span>;
+
+<span class="cmt">/* ③ Function Prototype (declaration before use) */</span>
+<span class="typ">void</span> <span class="fn">greet</span>(<span class="typ">void</span>);
+
+<span class="cmt">/* ④ main() — Entry point of every C program */</span>
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="cmt">// Local variable declaration</span>
+    <span class="typ">int</span> age <span class="op">=</span> <span class="num">20</span>;
+
+    <span class="cmt">// Statements and expressions</span>
+    <span class="fn">greet</span>();
+    <span class="fn">printf</span>(<span class="str">"Age: %d\n"</span>, age);
+
+    <span class="kw">return</span> <span class="num">0</span>;    <span class="cmt">// 0 = success</span>
+}
+
+<span class="cmt">/* ⑤ Function Definition */</span>
+<span class="typ">void</span> <span class="fn">greet</span>() {
+    <span class="fn">printf</span>(<span class="str">"Hello from ScholarNest!\n"</span>);
+}</pre>
+      </div>
+
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <pre>Hello from ScholarNest!
+Age: 20</pre>
+      </div>
+
+      <h3>Key Parts Explained</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Part</th><th>Symbol / Keyword</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>Header files</td><td><code>#include &lt;stdio.h&gt;</code></td><td>Import standard library declarations</td></tr>
+            <tr><td>main function</td><td><code>int main()</code></td><td>Entry point — execution starts here</td></tr>
+            <tr><td>Statements</td><td>ends with <code>;</code></td><td>Single instruction (print, assign, call)</td></tr>
+            <tr><td>Block</td><td><code>{ }</code></td><td>Groups multiple statements together</td></tr>
+            <tr><td>Comment (single)</td><td><code>// text</code></td><td>Ignored by compiler — for human readers</td></tr>
+            <tr><td>Comment (multi)</td><td><code>/* text */</code></td><td>Multi-line comment block</td></tr>
+            <tr><td>Return value</td><td><code>return 0;</code></td><td>Signals successful program exit (0 = ok)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 3. DATA TYPES -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="datatypes">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2>Data Types</h2>
+      </div>
+
+      <p>C is a <strong>statically typed</strong> language — every variable must have a declared type. The type tells the compiler how many bytes to allocate and how to interpret the bits.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Type</th><th>Size (bytes)</th><th>Format Specifier</th><th>Range / Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>int</code></td><td>4</td><td><code>%d</code></td><td>-2,147,483,648 to 2,147,483,647</td></tr>
+            <tr><td><code>short int</code></td><td>2</td><td><code>%hd</code></td><td>-32,768 to 32,767</td></tr>
+            <tr><td><code>long int</code></td><td>4 or 8</td><td><code>%ld</code></td><td>Larger integer range</td></tr>
+            <tr><td><code>unsigned int</code></td><td>4</td><td><code>%u</code></td><td>0 to 4,294,967,295</td></tr>
+            <tr><td><code>float</code></td><td>4</td><td><code>%f</code></td><td>3.4e-38 to 3.4e+38 (6 decimals)</td></tr>
+            <tr><td><code>double</code></td><td>8</td><td><code>%lf</code></td><td>1.7e-308 to 1.7e+308 (15 decimals)</td></tr>
+            <tr><td><code>char</code></td><td>1</td><td><code>%c</code></td><td>-128 to 127 (single character)</td></tr>
+            <tr><td><code>void</code></td><td>0</td><td>—</td><td>No value / generic pointer</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Data Types — Example</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="typ">int</span>    age    <span class="op">=</span> <span class="num">21</span>;
+    <span class="typ">float</span>  price  <span class="op">=</span> <span class="num">99.99f</span>;
+    <span class="typ">double</span> pi     <span class="op">=</span> <span class="num">3.141592653589</span>;
+    <span class="typ">char</span>   grade  <span class="op">=</span> <span class="str">'A'</span>;
+
+    <span class="fn">printf</span>(<span class="str">"Age    : %d\n"</span>,   age);
+    <span class="fn">printf</span>(<span class="str">"Price  : %.2f\n"</span>, price);
+    <span class="fn">printf</span>(<span class="str">"Pi     : %.10lf\n"</span>, pi);
+    <span class="fn">printf</span>(<span class="str">"Grade  : %c\n"</span>,   grade);
+    <span class="fn">printf</span>(<span class="str">"Size of int: %zu bytes\n"</span>, <span class="kw">sizeof</span>(<span class="typ">int</span>));
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <pre>Age    : 21
+Price  : 99.99
+Pi     : 3.1415926536
+Grade  : A
+Size of int: 4 bytes</pre>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 4. VARIABLES & CONSTANTS -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="variables">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2>Variables & Constants</h2>
+      </div>
+
+      <p>A <strong>variable</strong> is a named memory location that stores a value which can change. A <strong>constant</strong> is a value that never changes once defined.</p>
+
+      <h3>Variable Declaration & Initialization</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Variables</span></div>
+        <pre><span class="cmt">// Declaration only</span>
+<span class="typ">int</span> num;
+
+<span class="cmt">// Declaration + Initialization</span>
+<span class="typ">int</span> marks <span class="op">=</span> <span class="num">95</span>;
+
+<span class="cmt">// Multiple variables same line</span>
+<span class="typ">int</span> a <span class="op">=</span> <span class="num">5</span>, b <span class="op">=</span> <span class="num">10</span>, c;
+
+<span class="cmt">// Variable naming rules:</span>
+<span class="cmt">// ✓ starts with letter or underscore</span>
+<span class="cmt">// ✓ can contain letters, digits, _</span>
+<span class="cmt">// ✗ cannot start with digit: 3num (invalid)</span>
+<span class="cmt">// ✗ cannot use keywords: int, float, etc.</span>
+
+<span class="typ">int</span> _count  <span class="op">=</span> <span class="num">0</span>;     <span class="cmt">// valid</span>
+<span class="typ">int</span> myVar2  <span class="op">=</span> <span class="num">42</span>;    <span class="cmt">// valid</span>
+<span class="cmt">// int 2var = 1;  ERROR — starts with digit</span></pre>
+      </div>
+
+      <h3>Constants — Three Ways</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Constants</span></div>
+        <pre><span class="cmt">// Method 1: #define (preprocessor macro)</span>
+<span class="inc">#define</span> PI       <span class="num">3.14159</span>
+<span class="inc">#define</span> MAX      <span class="num">100</span>
+<span class="inc">#define</span> GREETING <span class="str">"Hello!"</span>
+
+<span class="cmt">// Method 2: const keyword (type-safe, preferred)</span>
+<span class="kw">const</span> <span class="typ">float</span> GRAVITY <span class="op">=</span> <span class="num">9.8f</span>;
+<span class="kw">const</span> <span class="typ">int</span>   DAYS    <span class="op">=</span> <span class="num">365</span>;
+
+<span class="cmt">// Method 3: enum (named integer constants)</span>
+<span class="kw">enum</span> Weekday { MON<span class="op">=</span><span class="num">1</span>, TUE, WED, THU, FRI, SAT, SUN };
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="fn">printf</span>(<span class="str">"PI = %.5f\n"</span>, PI);
+    <span class="fn">printf</span>(<span class="str">"Gravity = %.1f m/s²\n"</span>, GRAVITY);
+
+    <span class="kw">enum</span> Weekday today <span class="op">=</span> WED;
+    <span class="fn">printf</span>(<span class="str">"Wednesday = %d\n"</span>, today); <span class="cmt">// prints 3</span>
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+
+      <div class="info-box tip">
+        <span class="info-icon">✅</span>
+        <p>Prefer <code>const</code> over <code>#define</code> for type safety. <code>#define</code> is a simple text replacement with no type checking.</p>
+      </div>
+
+      <h3>Storage Classes</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Storage Class</th><th>Keyword</th><th>Lifetime</th><th>Default Value</th></tr></thead>
+          <tbody>
+            <tr><td>Automatic</td><td><code>auto</code></td><td>Inside block</td><td>Garbage</td></tr>
+            <tr><td>External</td><td><code>extern</code></td><td>Program</td><td>0</td></tr>
+            <tr><td>Static</td><td><code>static</code></td><td>Program</td><td>0</td></tr>
+            <tr><td>Register</td><td><code>register</code></td><td>Inside block</td><td>Garbage</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 5. OPERATORS -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="operators">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2>Operators</h2>
+      </div>
+
+      <p>C has a rich set of operators. They are the building blocks of expressions.</p>
+
+      <h3>Arithmetic Operators</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Arithmetic</span></div>
+        <pre><span class="typ">int</span> a <span class="op">=</span> <span class="num">10</span>, b <span class="op">=</span> <span class="num">3</span>;
+
+<span class="fn">printf</span>(<span class="str">"a + b  = %d\n"</span>, a <span class="op">+</span> b);   <span class="cmt">// 13</span>
+<span class="fn">printf</span>(<span class="str">"a - b  = %d\n"</span>, a <span class="op">-</span> b);   <span class="cmt">// 7</span>
+<span class="fn">printf</span>(<span class="str">"a * b  = %d\n"</span>, a <span class="op">*</span> b);   <span class="cmt">// 30</span>
+<span class="fn">printf</span>(<span class="str">"a / b  = %d\n"</span>, a <span class="op">/</span> b);   <span class="cmt">// 3  (integer division)</span>
+<span class="fn">printf</span>(<span class="str">"a %% b = %d\n"</span>, a <span class="op">%</span> b);   <span class="cmt">// 1  (remainder / modulo)</span>
+
+<span class="cmt">// Increment / Decrement</span>
+<span class="typ">int</span> x <span class="op">=</span> <span class="num">5</span>;
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, <span class="op">++</span>x);    <span class="cmt">// 6  (pre-increment)</span>
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, x<span class="op">++</span>);    <span class="cmt">// 6  (post-increment, prints then adds)</span>
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, x);       <span class="cmt">// 7</span></pre>
+      </div>
+
+      <h3>Relational & Logical Operators</h3>
+      <div class="two-col">
+        <div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C</span><span class="code-label">Relational</span></div>
+            <pre><span class="cmt">// All return 1 (true) or 0 (false)</span>
+a <span class="op">==</span> b   <span class="cmt">// equal</span>
+a <span class="op">!=</span> b   <span class="cmt">// not equal</span>
+a <span class="op">&gt;</span>  b   <span class="cmt">// greater than</span>
+a <span class="op">&lt;</span>  b   <span class="cmt">// less than</span>
+a <span class="op">&gt;=</span> b   <span class="cmt">// greater or equal</span>
+a <span class="op">&lt;=</span> b   <span class="cmt">// less or equal</span></pre>
+          </div>
+        </div>
+        <div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C</span><span class="code-label">Logical</span></div>
+            <pre><span class="cmt">// AND, OR, NOT</span>
+(a<span class="op">&gt;</span><span class="num">0</span>) <span class="op">&amp;&amp;</span> (b<span class="op">&gt;</span><span class="num">0</span>)  <span class="cmt">// both true</span>
+(a<span class="op">&gt;</span><span class="num">0</span>) <span class="op">||</span> (b<span class="op">&gt;</span><span class="num">0</span>)  <span class="cmt">// at least one</span>
+<span class="op">!</span>(a<span class="op">&gt;</span><span class="num">0</span>)         <span class="cmt">// NOT a&gt;0</span>
+
+<span class="cmt">// Example</span>
+<span class="kw">if</span> (age <span class="op">&gt;=</span> <span class="num">18</span> <span class="op">&amp;&amp;</span> age <span class="op">&lt;=</span> <span class="num">60</span>)
+    <span class="fn">printf</span>(<span class="str">"Working age\n"</span>);</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>Bitwise & Assignment Operators</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Type</th><th>Operators</th><th>Example</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td>Bitwise AND</td><td><code>&amp;</code></td><td><code>5 &amp; 3</code></td><td><code>1</code> (0101 AND 0011 = 0001)</td></tr>
+            <tr><td>Bitwise OR</td><td><code>|</code></td><td><code>5 | 3</code></td><td><code>7</code> (0101 OR 0011 = 0111)</td></tr>
+            <tr><td>Bitwise XOR</td><td><code>^</code></td><td><code>5 ^ 3</code></td><td><code>6</code></td></tr>
+            <tr><td>Left Shift</td><td><code>&lt;&lt;</code></td><td><code>5 &lt;&lt; 1</code></td><td><code>10</code> (multiply by 2)</td></tr>
+            <tr><td>Right Shift</td><td><code>&gt;&gt;</code></td><td><code>8 &gt;&gt; 1</code></td><td><code>4</code> (divide by 2)</td></tr>
+            <tr><td>Compound assign</td><td><code>+=  -=  *=  /=  %=</code></td><td><code>a += 5</code></td><td>same as <code>a = a + 5</code></td></tr>
+            <tr><td>Ternary</td><td><code>? :</code></td><td><code>x = (a&gt;b) ? a : b</code></td><td>max of a and b</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 6. INPUT & OUTPUT -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="io">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <h2>Input & Output (I/O)</h2>
+      </div>
+
+      <p>The <code>stdio.h</code> library provides the standard I/O functions. <code>printf()</code> writes to screen; <code>scanf()</code> reads from keyboard.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">printf() & scanf() — Complete Example</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="typ">int</span>   age;
+    <span class="typ">float</span> gpa;
+    <span class="typ">char</span>  name[<span class="num">50</span>];
+
+    <span class="cmt">// Reading a string (no & needed for char arrays)</span>
+    <span class="fn">printf</span>(<span class="str">"Enter your name: "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%s"</span>, name);
+
+    <span class="cmt">// Reading int and float</span>
+    <span class="fn">printf</span>(<span class="str">"Enter age and GPA: "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d %f"</span>, <span class="op">&amp;</span>age, <span class="op">&amp;</span>gpa);
+
+    <span class="cmt">// Formatted output</span>
+    <span class="fn">printf</span>(<span class="str">"\n--- Student Report ---\n"</span>);
+    <span class="fn">printf</span>(<span class="str">"Name : %-10s\n"</span>, name);   <span class="cmt">// left-align, 10 width</span>
+    <span class="fn">printf</span>(<span class="str">"Age  : %5d years\n"</span>, age); <span class="cmt">// right-align, 5 width</span>
+    <span class="fn">printf</span>(<span class="str">"GPA  : %.2f\n"</span>, gpa);      <span class="cmt">// 2 decimal places</span>
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+
+      <div class="output-block">
+        <div class="output-header">▶ Sample Run</div>
+        <pre>Enter your name: Arjun
+Enter age and GPA: 20 8.75
+
+--- Student Report ---
+Name : Arjun     
+Age  :    20 years
+GPA  : 8.75</pre>
+      </div>
+
+      <h3>Format Specifiers Quick Reference</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Specifier</th><th>Type</th><th>Example</th><th>Output</th></tr></thead>
+          <tbody>
+            <tr><td><code>%d / %i</code></td><td>int</td><td><code>printf("%d", 42)</code></td><td>42</td></tr>
+            <tr><td><code>%f</code></td><td>float/double</td><td><code>printf("%.2f", 3.14)</code></td><td>3.14</td></tr>
+            <tr><td><code>%c</code></td><td>char</td><td><code>printf("%c", 'A')</code></td><td>A</td></tr>
+            <tr><td><code>%s</code></td><td>string</td><td><code>printf("%s", "Hi")</code></td><td>Hi</td></tr>
+            <tr><td><code>%o</code></td><td>Octal</td><td><code>printf("%o", 8)</code></td><td>10</td></tr>
+            <tr><td><code>%x / %X</code></td><td>Hex</td><td><code>printf("%x", 255)</code></td><td>ff / FF</td></tr>
+            <tr><td><code>%p</code></td><td>Pointer</td><td><code>printf("%p", &x)</code></td><td>0x7fff...</td></tr>
+            <tr><td><code>%zu</code></td><td>size_t</td><td><code>printf("%zu", sizeof(int))</code></td><td>4</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 7. CONDITIONALS -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="conditionals">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <h2>Conditional Statements</h2>
+      </div>
+
+      <p>Conditionals let your program make decisions — executing different code depending on whether a condition is true or false.</p>
+
+      <div class="diagram-wrap">
+        <div class="diagram-title">if — else if — else Flowchart</div>
+        <svg width="100%" viewBox="0 0 680 380" role="img" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#2D8CCA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <!-- Start -->
+          <ellipse cx="340" cy="30" rx="60" ry="20" fill="#0D1B2A" stroke="#2D8CCA" stroke-width="1.5"/>
+          <text x="340" y="35" text-anchor="middle" font-size="13" font-weight="600" fill="white">START</text>
+
+          <!-- Arrow down -->
+          <line x1="340" y1="50" x2="340" y2="75" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+          <!-- Diamond 1: if (condition1) -->
+          <polygon points="340,80 420,115 340,150 260,115" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.5"/>
+          <text x="340" y="110" text-anchor="middle" font-size="12" fill="#0D1B2A" font-weight="600">condition 1</text>
+          <text x="340" y="126" text-anchor="middle" font-size="11" fill="#1B4F8A">(if block)</text>
+
+          <!-- True branch left -->
+          <line x1="260" y1="115" x2="120" y2="115" stroke="#1A7A4A" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="192" y="108" text-anchor="middle" font-size="11" fill="#1A7A4A" font-weight="600">TRUE</text>
+          <rect x="50" y="95" width="70" height="40" rx="8" fill="#F0FDF4" stroke="#1A7A4A" stroke-width="1.5"/>
+          <text x="85" y="115" text-anchor="middle" font-size="12" fill="#0D1B2A" font-weight="600">Block 1</text>
+          <text x="85" y="128" text-anchor="middle" font-size="10" fill="#1A7A4A">Executes</text>
+
+          <!-- False arrow down -->
+          <line x1="340" y1="150" x2="340" y2="195" stroke="#DC2626" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="352" y="175" font-size="11" fill="#DC2626" font-weight="600">FALSE</text>
+
+          <!-- Diamond 2: else if -->
+          <polygon points="340,200 420,235 340,270 260,235" fill="#FFF7ED" stroke="#EA7700" stroke-width="1.5"/>
+          <text x="340" y="230" text-anchor="middle" font-size="12" fill="#0D1B2A" font-weight="600">condition 2</text>
+          <text x="340" y="246" text-anchor="middle" font-size="11" fill="#EA7700">(else if)</text>
+
+          <!-- True branch right -->
+          <line x1="420" y1="235" x2="560" y2="235" stroke="#1A7A4A" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="490" y="228" text-anchor="middle" font-size="11" fill="#1A7A4A" font-weight="600">TRUE</text>
+          <rect x="560" y="215" width="70" height="40" rx="8" fill="#F0FDF4" stroke="#1A7A4A" stroke-width="1.5"/>
+          <text x="595" y="235" text-anchor="middle" font-size="12" fill="#0D1B2A" font-weight="600">Block 2</text>
+          <text x="595" y="248" text-anchor="middle" font-size="10" fill="#1A7A4A">Executes</text>
+
+          <!-- False arrow down to else -->
+          <line x1="340" y1="270" x2="340" y2="305" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="352" y="290" font-size="11" fill="#6B7280" font-weight="600">FALSE</text>
+
+          <!-- Else block -->
+          <rect x="275" y="308" width="130" height="40" rx="8" fill="#F5F3FF" stroke="#7C3AED" stroke-width="1.5"/>
+          <text x="340" y="328" text-anchor="middle" font-size="12" fill="#0D1B2A" font-weight="600">else block</text>
+          <text x="340" y="341" text-anchor="middle" font-size="10" fill="#7C3AED">Default executes</text>
+
+          <!-- All blocks to END -->
+          <line x1="85" y1="135" x2="85" y2="360" stroke="#6B7280" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="85" y1="360" x2="340" y2="360" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <line x1="595" y1="255" x2="595" y2="360" stroke="#6B7280" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="595" y1="360" x2="480" y2="360" stroke="#6B7280" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="340" y1="348" x2="340" y2="352" stroke="#6B7280" stroke-width="1"/>
+
+          <!-- END -->
+          <ellipse cx="340" cy="370" rx="60" ry="18" fill="#0D1B2A" stroke="#2D8CCA" stroke-width="1.5"/>
+          <text x="340" y="375" text-anchor="middle" font-size="13" font-weight="600" fill="white">END</text>
+        </svg>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">if — else if — else Example</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="typ">int</span> marks;
+    <span class="fn">printf</span>(<span class="str">"Enter marks (0-100): "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, <span class="op">&amp;</span>marks);
+
+    <span class="kw">if</span> (marks <span class="op">&gt;=</span> <span class="num">90</span>) {
+        <span class="fn">printf</span>(<span class="str">"Grade: A+ — Distinction!\n"</span>);
+    } <span class="kw">else if</span> (marks <span class="op">&gt;=</span> <span class="num">75</span>) {
+        <span class="fn">printf</span>(<span class="str">"Grade: A — First Class\n"</span>);
+    } <span class="kw">else if</span> (marks <span class="op">&gt;=</span> <span class="num">60</span>) {
+        <span class="fn">printf</span>(<span class="str">"Grade: B — Second Class\n"</span>);
+    } <span class="kw">else if</span> (marks <span class="op">&gt;=</span> <span class="num">40</span>) {
+        <span class="fn">printf</span>(<span class="str">"Grade: C — Pass\n"</span>);
+    } <span class="kw">else</span> {
+        <span class="fn">printf</span>(<span class="str">"Grade: F — Fail\n"</span>);
+    }
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+
+      <h3>switch — case Statement</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">switch Example — Day of Week</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="typ">int</span> day;
+    <span class="fn">printf</span>(<span class="str">"Enter day (1-7): "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, <span class="op">&amp;</span>day);
+
+    <span class="kw">switch</span> (day) {
+        <span class="kw">case</span> <span class="num">1</span>: <span class="fn">printf</span>(<span class="str">"Monday\n"</span>);    <span class="kw">break</span>;
+        <span class="kw">case</span> <span class="num">2</span>: <span class="fn">printf</span>(<span class="str">"Tuesday\n"</span>);   <span class="kw">break</span>;
+        <span class="kw">case</span> <span class="num">3</span>: <span class="fn">printf</span>(<span class="str">"Wednesday\n"</span>); <span class="kw">break</span>;
+        <span class="kw">case</span> <span class="num">4</span>: <span class="fn">printf</span>(<span class="str">"Thursday\n"</span>);  <span class="kw">break</span>;
+        <span class="kw">case</span> <span class="num">5</span>: <span class="fn">printf</span>(<span class="str">"Friday\n"</span>);    <span class="kw">break</span>;
+        <span class="kw">case</span> <span class="num">6</span>:
+        <span class="kw">case</span> <span class="num">7</span>: <span class="fn">printf</span>(<span class="str">"Weekend!\n"</span>);  <span class="kw">break</span>;
+        <span class="kw">default</span>: <span class="fn">printf</span>(<span class="str">"Invalid day\n"</span>);
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+
+      <div class="info-box warning">
+        <span class="info-icon">⚠️</span>
+        <p>Always use <code>break</code> in each case! Without it, execution "falls through" to the next case — this can cause bugs but is also intentionally used (cases 6 & 7 above share the same output).</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 8. LOOPS -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="loops">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <h2>Loops</h2>
+      </div>
+
+      <p>Loops repeat a block of code. C provides three loop constructs: <code>for</code>, <code>while</code>, and <code>do-while</code>.</p>
+
+      <div class="diagram-wrap">
+        <div class="diagram-title">Three Loop Flowcharts — for / while / do-while</div>
+        <svg width="100%" viewBox="0 0 680 310" role="img" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="la" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#2D8CCA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <!-- === FOR LOOP (left) === -->
+          <text x="110" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#0D1B2A">for loop</text>
+          <!-- Init -->
+          <rect x="55" y="28" width="110" height="32" rx="7" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.2"/>
+          <text x="110" y="49" text-anchor="middle" font-size="12" fill="#1B4F8A" font-weight="600">Init (i=0)</text>
+          <line x1="110" y1="60" x2="110" y2="80" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#la)"/>
+          <!-- Condition diamond -->
+          <polygon points="110,82 165,106 110,130 55,106" fill="#FFF7ED" stroke="#EA7700" stroke-width="1.2"/>
+          <text x="110" y="101" text-anchor="middle" font-size="11" fill="#0D1B2A" font-weight="600">i &lt; n?</text>
+          <text x="110" y="115" text-anchor="middle" font-size="10" fill="#EA7700">condition</text>
+          <!-- True arrow down -->
+          <line x1="110" y1="130" x2="110" y2="160" stroke="#1A7A4A" stroke-width="1.5" marker-end="url(#la)"/>
+          <text x="118" y="148" font-size="10" fill="#1A7A4A" font-weight="600">T</text>
+          <!-- Body -->
+          <rect x="55" y="163" width="110" height="32" rx="7" fill="#F0FDF4" stroke="#1A7A4A" stroke-width="1.2"/>
+          <text x="110" y="184" text-anchor="middle" font-size="12" fill="#0D1B2A" font-weight="600">Loop Body</text>
+          <!-- Update -->
+          <line x1="110" y1="195" x2="110" y2="215" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#la)"/>
+          <rect x="55" y="218" width="110" height="32" rx="7" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.2"/>
+          <text x="110" y="239" text-anchor="middle" font-size="12" fill="#1B4F8A" font-weight="600">i++ (update)</text>
+          <!-- Back arrow -->
+          <line x1="55" y1="234" x2="30" y2="234" stroke="#2D8CCA" stroke-width="1.2"/>
+          <line x1="30" y1="234" x2="30" y2="106" stroke="#2D8CCA" stroke-width="1.2"/>
+          <line x1="30" y1="106" x2="55" y2="106" stroke="#2D8CCA" stroke-width="1.2" marker-end="url(#la)"/>
+          <!-- False exit -->
+          <line x1="165" y1="106" x2="195" y2="106" stroke="#DC2626" stroke-width="1.5" marker-end="url(#la)"/>
+          <text x="177" y="99" font-size="10" fill="#DC2626" font-weight="600">F</text>
+          <ellipse cx="215" cy="106" rx="20" ry="14" fill="#0D1B2A" stroke="#2D8CCA" stroke-width="1"/>
+          <text x="215" y="111" text-anchor="middle" font-size="11" fill="white">END</text>
+
+          <!-- === WHILE LOOP (center) === -->
+          <text x="340" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#0D1B2A">while loop</text>
+          <polygon points="340,28 395,60 340,92 285,60" fill="#FFF7ED" stroke="#EA7700" stroke-width="1.2"/>
+          <text x="340" y="56" text-anchor="middle" font-size="11" fill="#0D1B2A" font-weight="600">condition?</text>
+          <text x="340" y="70" text-anchor="middle" font-size="10" fill="#EA7700">check first</text>
+          <!-- True down -->
+          <line x1="340" y1="92" x2="340" y2="122" stroke="#1A7A4A" stroke-width="1.5" marker-end="url(#la)"/>
+          <text x="348" y="110" font-size="10" fill="#1A7A4A" font-weight="600">T</text>
+          <!-- Body -->
+          <rect x="285" y="125" width="110" height="32" rx="7" fill="#F0FDF4" stroke="#1A7A4A" stroke-width="1.2"/>
+          <text x="340" y="146" text-anchor="middle" font-size="12" fill="#0D1B2A" font-weight="600">Loop Body</text>
+          <!-- Back to condition -->
+          <line x1="285" y1="141" x2="260" y2="141" stroke="#2D8CCA" stroke-width="1.2"/>
+          <line x1="260" y1="141" x2="260" y2="60" stroke="#2D8CCA" stroke-width="1.2"/>
+          <line x1="260" y1="60" x2="285" y2="60" stroke="#2D8CCA" stroke-width="1.2" marker-end="url(#la)"/>
+          <!-- False exit -->
+          <line x1="395" y1="60" x2="430" y2="60" stroke="#DC2626" stroke-width="1.5" marker-end="url(#la)"/>
+          <text x="412" y="53" font-size="10" fill="#DC2626" font-weight="600">F</text>
+          <ellipse cx="450" cy="60" rx="20" ry="14" fill="#0D1B2A" stroke="#2D8CCA" stroke-width="1"/>
+          <text x="450" y="65" text-anchor="middle" font-size="11" fill="white">END</text>
+
+          <!-- === DO-WHILE LOOP (right) === -->
+          <text x="590" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#0D1B2A">do-while loop</text>
+          <!-- Body executes first -->
+          <rect x="535" y="28" width="110" height="32" rx="7" fill="#F0FDF4" stroke="#1A7A4A" stroke-width="1.2"/>
+          <text x="590" y="49" text-anchor="middle" font-size="12" fill="#0D1B2A" font-weight="600">Loop Body</text>
+          <text x="590" y="24" text-anchor="middle" font-size="10" fill="#1A7A4A">(runs at least once)</text>
+          <line x1="590" y1="60" x2="590" y2="85" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#la)"/>
+          <!-- Condition -->
+          <polygon points="590,88 645,115 590,142 535,115" fill="#FFF7ED" stroke="#EA7700" stroke-width="1.2"/>
+          <text x="590" y="111" text-anchor="middle" font-size="11" fill="#0D1B2A" font-weight="600">condition?</text>
+          <text x="590" y="125" text-anchor="middle" font-size="10" fill="#EA7700">check after</text>
+          <!-- True: loop back -->
+          <line x1="535" y1="115" x2="505" y2="115" stroke="#1A7A4A" stroke-width="1.5"/>
+          <text x="498" y="110" font-size="10" fill="#1A7A4A" font-weight="600">T</text>
+          <line x1="505" y1="115" x2="505" y2="44" stroke="#1A7A4A" stroke-width="1.2"/>
+          <line x1="505" y1="44" x2="535" y2="44" stroke="#1A7A4A" stroke-width="1.2" marker-end="url(#la)"/>
+          <!-- False exit -->
+          <line x1="590" y1="142" x2="590" y2="165" stroke="#DC2626" stroke-width="1.5" marker-end="url(#la)"/>
+          <text x="600" y="156" font-size="10" fill="#DC2626" font-weight="600">F</text>
+          <ellipse cx="590" cy="178" rx="30" ry="14" fill="#0D1B2A" stroke="#2D8CCA" stroke-width="1"/>
+          <text x="590" y="183" text-anchor="middle" font-size="11" fill="white">EXIT</text>
+
+          <!-- Labels bottom -->
+          <text x="110" y="280" text-anchor="middle" font-size="12" fill="#6B7280">Known iterations</text>
+          <text x="110" y="296" text-anchor="middle" font-size="11" fill="#6B7280">e.g. for(i=0;i&lt;10;i++)</text>
+          <text x="340" y="280" text-anchor="middle" font-size="12" fill="#6B7280">May skip entirely</text>
+          <text x="340" y="296" text-anchor="middle" font-size="11" fill="#6B7280">e.g. while(n&gt;0)</text>
+          <text x="590" y="280" text-anchor="middle" font-size="12" fill="#6B7280">Always runs once</text>
+          <text x="590" y="296" text-anchor="middle" font-size="11" fill="#6B7280">e.g. menu programs</text>
+        </svg>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">for loop — Sum of N numbers</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="typ">int</span> n, i, sum <span class="op">=</span> <span class="num">0</span>;
+    <span class="fn">printf</span>(<span class="str">"Enter n: "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, <span class="op">&amp;</span>n);
+
+    <span class="kw">for</span> (i <span class="op">=</span> <span class="num">1</span>; i <span class="op">&lt;=</span> n; i<span class="op">++</span>) {
+        sum <span class="op">+=</span> i;          <span class="cmt">// sum = sum + i</span>
+    }
+    <span class="fn">printf</span>(<span class="str">"Sum of 1 to %d = %d\n"</span>, n, sum);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+
+      <div class="output-block"><div class="output-header">▶ Output (n=5)</div><pre>Sum of 1 to 5 = 15</pre></div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">while loop — Reverse a number</span></div>
+        <pre><span class="typ">int</span> n <span class="op">=</span> <span class="num">12345</span>, rev <span class="op">=</span> <span class="num">0</span>, rem;
+
+<span class="kw">while</span> (n <span class="op">!=</span> <span class="num">0</span>) {
+    rem <span class="op">=</span> n <span class="op">%</span> <span class="num">10</span>;      <span class="cmt">// extract last digit</span>
+    rev <span class="op">=</span> rev <span class="op">*</span> <span class="num">10</span> <span class="op">+</span> rem;
+    n <span class="op">/=</span> <span class="num">10</span>;            <span class="cmt">// remove last digit</span>
+}
+<span class="fn">printf</span>(<span class="str">"Reversed: %d\n"</span>, rev);   <span class="cmt">// 54321</span></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">do-while — Menu until Exit</span></div>
+        <pre><span class="typ">int</span> choice;
+<span class="kw">do</span> {
+    <span class="fn">printf</span>(<span class="str">"\n1. Add  2. Subtract  3. Exit\n"</span>);
+    <span class="fn">printf</span>(<span class="str">"Choice: "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, <span class="op">&amp;</span>choice);
+    <span class="kw">if</span> (choice <span class="op">==</span> <span class="num">1</span>)      <span class="fn">printf</span>(<span class="str">"Adding...\n"</span>);
+    <span class="kw">else if</span> (choice <span class="op">==</span> <span class="num">2</span>) <span class="fn">printf</span>(<span class="str">"Subtracting...\n"</span>);
+} <span class="kw">while</span> (choice <span class="op">!=</span> <span class="num">3</span>);
+
+<span class="fn">printf</span>(<span class="str">"Goodbye!\n"</span>);</pre>
+      </div>
+
+      <h3>Nested Loops — Multiplication Table</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Nested for — Multiplication Table</span></div>
+        <pre><span class="kw">for</span> (<span class="typ">int</span> i <span class="op">=</span> <span class="num">1</span>; i <span class="op">&lt;=</span> <span class="num">5</span>; i<span class="op">++</span>) {
+    <span class="kw">for</span> (<span class="typ">int</span> j <span class="op">=</span> <span class="num">1</span>; j <span class="op">&lt;=</span> <span class="num">5</span>; j<span class="op">++</span>) {
+        <span class="fn">printf</span>(<span class="str">"%4d"</span>, i <span class="op">*</span> j);
+    }
+    <span class="fn">printf</span>(<span class="str">"\n"</span>);
+}</pre>
+      </div>
+
+      <div class="output-block"><div class="output-header">▶ Output</div><pre>   1   2   3   4   5
+   2   4   6   8  10
+   3   6   9  12  15
+   4   8  12  16  20
+   5  10  15  20  25</pre></div>
+
+      <h3>break & continue</h3>
+      <div class="two-col">
+        <div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C</span><span class="code-label">break</span></div>
+            <pre><span class="kw">for</span> (<span class="typ">int</span> i<span class="op">=</span><span class="num">1</span>; i<span class="op">&lt;=</span><span class="num">10</span>; i<span class="op">++</span>) {
+  <span class="kw">if</span> (i <span class="op">==</span> <span class="num">5</span>)
+    <span class="kw">break</span>;  <span class="cmt">// exit loop</span>
+  <span class="fn">printf</span>(<span class="str">"%d "</span>, i);
+}
+<span class="cmt">// Output: 1 2 3 4</span></pre>
+          </div>
+        </div>
+        <div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">C</span><span class="code-label">continue</span></div>
+            <pre><span class="kw">for</span> (<span class="typ">int</span> i<span class="op">=</span><span class="num">1</span>; i<span class="op">&lt;=</span><span class="num">10</span>; i<span class="op">++</span>) {
+  <span class="kw">if</span> (i <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>)
+    <span class="kw">continue</span>; <span class="cmt">// skip evens</span>
+  <span class="fn">printf</span>(<span class="str">"%d "</span>, i);
+}
+<span class="cmt">// Output: 1 3 5 7 9</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 9. ARRAYS -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="arrays">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <h2>Arrays</h2>
+      </div>
+
+      <p>An array is a collection of <strong>same-type</strong> elements stored in <strong>contiguous memory</strong>. Arrays are zero-indexed in C.</p>
+
+      <div class="diagram-wrap">
+        <div class="diagram-title">Array Memory Layout — int arr[5]</div>
+        <svg width="100%" viewBox="0 0 680 120" role="img" xmlns="http://www.w3.org/2000/svg">
+          <!-- Memory cells -->
+          <rect x="80"  y="40" width="90" height="50" rx="6" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.5"/>
+          <rect x="175" y="40" width="90" height="50" rx="6" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.5"/>
+          <rect x="270" y="40" width="90" height="50" rx="6" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.5"/>
+          <rect x="365" y="40" width="90" height="50" rx="6" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.5"/>
+          <rect x="460" y="40" width="90" height="50" rx="6" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.5"/>
+
+          <!-- Values -->
+          <text x="125" y="72" text-anchor="middle" font-size="18" font-weight="700" fill="#1B4F8A">10</text>
+          <text x="220" y="72" text-anchor="middle" font-size="18" font-weight="700" fill="#1B4F8A">20</text>
+          <text x="315" y="72" text-anchor="middle" font-size="18" font-weight="700" fill="#1B4F8A">30</text>
+          <text x="410" y="72" text-anchor="middle" font-size="18" font-weight="700" fill="#1B4F8A">40</text>
+          <text x="505" y="72" text-anchor="middle" font-size="18" font-weight="700" fill="#1B4F8A">50</text>
+
+          <!-- Indexes below cells -->
+          <text x="125" y="102" text-anchor="middle" font-size="12" fill="#EA7700" font-weight="600">arr[0]</text>
+          <text x="220" y="102" text-anchor="middle" font-size="12" fill="#EA7700" font-weight="600">arr[1]</text>
+          <text x="315" y="102" text-anchor="middle" font-size="12" fill="#EA7700" font-weight="600">arr[2]</text>
+          <text x="410" y="102" text-anchor="middle" font-size="12" fill="#EA7700" font-weight="600">arr[3]</text>
+          <text x="505" y="102" text-anchor="middle" font-size="12" fill="#EA7700" font-weight="600">arr[4]</text>
+
+          <!-- Addresses top -->
+          <text x="125" y="35" text-anchor="middle" font-size="10" fill="#6B7280">1000</text>
+          <text x="220" y="35" text-anchor="middle" font-size="10" fill="#6B7280">1004</text>
+          <text x="315" y="35" text-anchor="middle" font-size="10" fill="#6B7280">1008</text>
+          <text x="410" y="35" text-anchor="middle" font-size="10" fill="#6B7280">1012</text>
+          <text x="505" y="35" text-anchor="middle" font-size="10" fill="#6B7280">1016</text>
+
+          <!-- Base address arrow -->
+          <line x1="30" y1="65" x2="78" y2="65" stroke="#DC2626" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <text x="15" y="60" font-size="10" fill="#DC2626" font-weight="600">base</text>
+          <text x="15" y="72" font-size="10" fill="#DC2626">addr</text>
+        </svg>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">1D Array — Declaration, Init, Traverse</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="cmt">// Declaration and initialization</span>
+    <span class="typ">int</span> arr[<span class="num">5</span>] <span class="op">=</span> {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>};
+
+    <span class="cmt">// Access elements</span>
+    <span class="fn">printf</span>(<span class="str">"First: %d\n"</span>, arr[<span class="num">0</span>]);    <span class="cmt">// 10</span>
+    <span class="fn">printf</span>(<span class="str">"Last : %d\n"</span>, arr[<span class="num">4</span>]);    <span class="cmt">// 50</span>
+
+    <span class="cmt">// Traverse with for loop</span>
+    <span class="typ">int</span> n <span class="op">=</span> <span class="kw">sizeof</span>(arr) <span class="op">/</span> <span class="kw">sizeof</span>(arr[<span class="num">0</span>]);  <span class="cmt">// = 5</span>
+    <span class="fn">printf</span>(<span class="str">"Array: "</span>);
+    <span class="kw">for</span> (<span class="typ">int</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> n; i<span class="op">++</span>)
+        <span class="fn">printf</span>(<span class="str">"%d "</span>, arr[i]);
+
+    <span class="cmt">// Find max value</span>
+    <span class="typ">int</span> max <span class="op">=</span> arr[<span class="num">0</span>];
+    <span class="kw">for</span> (<span class="typ">int</span> i <span class="op">=</span> <span class="num">1</span>; i <span class="op">&lt;</span> n; i<span class="op">++</span>)
+        <span class="kw">if</span> (arr[i] <span class="op">&gt;</span> max) max <span class="op">=</span> arr[i];
+    <span class="fn">printf</span>(<span class="str">"\nMax = %d\n"</span>, max);
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+
+      <div class="output-block"><div class="output-header">▶ Output</div><pre>First: 10
+Last : 50
+Array: 10 20 30 40 50
+Max = 50</pre></div>
+
+      <h3>2D Array (Matrix)</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">2D Array — Matrix Addition</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="typ">int</span> A[<span class="num">2</span>][<span class="num">3</span>] <span class="op">=</span> {{<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>}, {<span class="num">4</span>,<span class="num">5</span>,<span class="num">6</span>}};
+    <span class="typ">int</span> B[<span class="num">2</span>][<span class="num">3</span>] <span class="op">=</span> {{<span class="num">7</span>,<span class="num">8</span>,<span class="num">9</span>}, {<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>}};
+    <span class="typ">int</span> C[<span class="num">2</span>][<span class="num">3</span>];
+
+    <span class="kw">for</span> (<span class="typ">int</span> i<span class="op">=</span><span class="num">0</span>; i<span class="op">&lt;</span><span class="num">2</span>; i<span class="op">++</span>)
+        <span class="kw">for</span> (<span class="typ">int</span> j<span class="op">=</span><span class="num">0</span>; j<span class="op">&lt;</span><span class="num">3</span>; j<span class="op">++</span>)
+            C[i][j] <span class="op">=</span> A[i][j] <span class="op">+</span> B[i][j];
+
+    <span class="fn">printf</span>(<span class="str">"Matrix C =\n"</span>);
+    <span class="kw">for</span> (<span class="typ">int</span> i<span class="op">=</span><span class="num">0</span>; i<span class="op">&lt;</span><span class="num">2</span>; i<span class="op">++</span>) {
+        <span class="kw">for</span> (<span class="typ">int</span> j<span class="op">=</span><span class="num">0</span>; j<span class="op">&lt;</span><span class="num">3</span>; j<span class="op">++</span>)
+            <span class="fn">printf</span>(<span class="str">"%4d"</span>, C[i][j]);
+        <span class="fn">printf</span>(<span class="str">"\n"</span>);
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+      <div class="output-block"><div class="output-header">▶ Output</div><pre>Matrix C =
+   8  10  12
+   5   7   9</pre></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 10. STRINGS -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="strings">
+      <div class="section-header">
+        <div class="section-num">10</div>
+        <h2>Strings</h2>
+      </div>
+
+      <p>In C, a string is a <strong>null-terminated character array</strong>. The last character is always <code>'\0'</code> (null character), which marks the end of the string.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Strings — Declaration & Functions</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="inc">#include</span> <span class="str">&lt;string.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="typ">char</span> str1[<span class="num">20</span>] <span class="op">=</span> <span class="str">"Hello"</span>;
+    <span class="typ">char</span> str2[<span class="num">20</span>] <span class="op">=</span> <span class="str">"World"</span>;
+    <span class="typ">char</span> str3[<span class="num">50</span>];
+
+    <span class="fn">printf</span>(<span class="str">"Length of str1: %zu\n"</span>, <span class="fn">strlen</span>(str1));  <span class="cmt">// 5</span>
+
+    <span class="fn">strcpy</span>(str3, str1);                    <span class="cmt">// copy str1 → str3</span>
+    <span class="fn">printf</span>(<span class="str">"Copied: %s\n"</span>, str3);           <span class="cmt">// Hello</span>
+
+    <span class="fn">strcat</span>(str3, <span class="str">" "</span>);
+    <span class="fn">strcat</span>(str3, str2);                    <span class="cmt">// concatenate</span>
+    <span class="fn">printf</span>(<span class="str">"Concatenated: %s\n"</span>, str3);    <span class="cmt">// Hello World</span>
+
+    <span class="typ">int</span> cmp <span class="op">=</span> <span class="fn">strcmp</span>(str1, str2);          <span class="cmt">// compare</span>
+    <span class="kw">if</span> (cmp <span class="op">==</span> <span class="num">0</span>) <span class="fn">printf</span>(<span class="str">"Equal\n"</span>);
+    <span class="kw">else</span> <span class="fn">printf</span>(<span class="str">"Not equal (result=%d)\n"</span>, cmp);
+
+    <span class="fn">strupr</span>(str1);   <span class="cmt">// HELLO (Windows/some compilers)</span>
+    <span class="fn">strlwr</span>(str2);   <span class="cmt">// world (Windows/some compilers)</span>
+
+    <span class="cmt">// Read string with spaces</span>
+    <span class="typ">char</span> fullname[<span class="num">50</span>];
+    <span class="fn">printf</span>(<span class="str">"Enter full name: "</span>);
+    <span class="fn">fgets</span>(fullname, <span class="kw">sizeof</span>(fullname), stdin);  <span class="cmt">// safer than gets()</span>
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+
+      <h3>String Functions — Quick Reference</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Function</th><th>Header</th><th>Purpose</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>strlen(s)</code></td><td>string.h</td><td>Length of string</td><td><code>strlen("Hi") = 2</code></td></tr>
+            <tr><td><code>strcpy(d,s)</code></td><td>string.h</td><td>Copy s into d</td><td><code>strcpy(a, "Hello")</code></td></tr>
+            <tr><td><code>strncpy(d,s,n)</code></td><td>string.h</td><td>Copy n chars safely</td><td><code>strncpy(a, b, 5)</code></td></tr>
+            <tr><td><code>strcat(d,s)</code></td><td>string.h</td><td>Append s to d</td><td><code>strcat(a, " World")</code></td></tr>
+            <tr><td><code>strcmp(a,b)</code></td><td>string.h</td><td>Compare (0=equal)</td><td><code>if(strcmp(a,b)==0)</code></td></tr>
+            <tr><td><code>strchr(s,c)</code></td><td>string.h</td><td>Find char in string</td><td><code>strchr("Hello",'l')</code></td></tr>
+            <tr><td><code>strstr(s,t)</code></td><td>string.h</td><td>Find substring</td><td><code>strstr("Hello","ell")</code></td></tr>
+            <tr><td><code>fgets(s,n,f)</code></td><td>stdio.h</td><td>Read line safely</td><td><code>fgets(name,50,stdin)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 11. FUNCTIONS -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="functions">
+      <div class="section-header">
+        <div class="section-num">11</div>
+        <h2>Functions</h2>
+      </div>
+
+      <p>A function is a block of code that performs a specific task. Functions promote <strong>reusability</strong>, <strong>modularity</strong>, and <strong>readability</strong>.</p>
+
+      <div class="diagram-wrap">
+        <div class="diagram-title">Function Call & Return — Stack Frame</div>
+        <svg width="100%" viewBox="0 0 680 240" role="img" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#2D8CCA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <!-- main() block -->
+          <rect x="40" y="20" width="200" height="200" rx="10" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.5"/>
+          <text x="140" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#1B4F8A">main()</text>
+          <rect x="60" y="52" width="160" height="28" rx="5" fill="white" stroke="#2D8CCA" stroke-width="1"/>
+          <text x="140" y="71" text-anchor="middle" font-size="12" fill="#374151" font-family="'JetBrains Mono'">int a = 5, b = 3;</text>
+          <rect x="60" y="88" width="160" height="28" rx="5" fill="#DBEAFE" stroke="#2D8CCA" stroke-width="1.2"/>
+          <text x="140" y="107" text-anchor="middle" font-size="12" fill="#1B4F8A" font-family="'JetBrains Mono'" font-weight="600">add(a, b) ← call</text>
+          <rect x="60" y="124" width="160" height="28" rx="5" fill="white" stroke="#2D8CCA" stroke-width="1"/>
+          <text x="140" y="143" text-anchor="middle" font-size="12" fill="#374151" font-family="'JetBrains Mono'">int result = ?</text>
+          <rect x="60" y="160" width="160" height="28" rx="5" fill="#F0FDF4" stroke="#1A7A4A" stroke-width="1"/>
+          <text x="140" y="179" text-anchor="middle" font-size="12" fill="#1A7A4A" font-family="'JetBrains Mono'">result = 8 ← return</text>
+          <text x="140" y="210" text-anchor="middle" font-size="11" fill="#6B7280">printf("%d", result);</text>
+
+          <!-- Arrows between -->
+          <line x1="240" y1="102" x2="390" y2="102" stroke="#EA7700" stroke-width="2" marker-end="url(#fa)"/>
+          <text x="315" y="93" text-anchor="middle" font-size="12" fill="#EA7700" font-weight="600">call with args</text>
+          <text x="315" y="106" text-anchor="middle" font-size="11" fill="#EA7700">(5, 3)</text>
+
+          <line x1="390" y1="170" x2="240" y2="170" stroke="#1A7A4A" stroke-width="2" marker-end="url(#fa)"/>
+          <text x="315" y="162" text-anchor="middle" font-size="12" fill="#1A7A4A" font-weight="600">return value</text>
+          <text x="315" y="176" text-anchor="middle" font-size="11" fill="#1A7A4A">(8)</text>
+
+          <!-- add() block -->
+          <rect x="390" y="60" width="240" height="140" rx="10" fill="#FFF7ED" stroke="#EA7700" stroke-width="1.5"/>
+          <text x="510" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="#EA7700">add(int x, int y)</text>
+          <rect x="410" y="92" width="200" height="28" rx="5" fill="white" stroke="#EA7700" stroke-width="1"/>
+          <text x="510" y="111" text-anchor="middle" font-size="12" fill="#374151" font-family="'JetBrains Mono'">int sum = x + y;</text>
+          <text x="510" y="140" text-anchor="middle" font-size="11" fill="#6B7280">x=5, y=3 (local copies)</text>
+          <rect x="410" y="148" width="200" height="28" rx="5" fill="#FEF3C7" stroke="#EA7700" stroke-width="1"/>
+          <text x="510" y="167" text-anchor="middle" font-size="12" fill="#92400E" font-family="'JetBrains Mono'" font-weight="600">return sum; → 8</text>
+
+          <!-- Stack label -->
+          <text x="340" y="225" text-anchor="middle" font-size="11" fill="#6B7280">Arguments passed by value — originals unchanged in main()</text>
+        </svg>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Functions — Complete Examples</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="cmt">// Function prototypes</span>
+<span class="typ">int</span>   <span class="fn">add</span>(<span class="typ">int</span> a, <span class="typ">int</span> b);
+<span class="typ">float</span> <span class="fn">average</span>(<span class="typ">int</span> arr[], <span class="typ">int</span> n);
+<span class="typ">int</span>   <span class="fn">factorial</span>(<span class="typ">int</span> n);         <span class="cmt">// recursive</span>
+<span class="typ">void</span>  <span class="fn">swap</span>(<span class="typ">int</span> <span class="op">*</span>a, <span class="typ">int</span> <span class="op">*</span>b);    <span class="cmt">// pointer param</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="fn">printf</span>(<span class="str">"5+3 = %d\n"</span>, <span class="fn">add</span>(<span class="num">5</span>, <span class="num">3</span>));
+
+    <span class="typ">int</span> marks[] <span class="op">=</span> {<span class="num">80</span>, <span class="num">75</span>, <span class="num">90</span>, <span class="num">65</span>, <span class="num">88</span>};
+    <span class="fn">printf</span>(<span class="str">"Average = %.2f\n"</span>, <span class="fn">average</span>(marks, <span class="num">5</span>));
+
+    <span class="fn">printf</span>(<span class="str">"5! = %d\n"</span>, <span class="fn">factorial</span>(<span class="num">5</span>));
+
+    <span class="typ">int</span> x <span class="op">=</span> <span class="num">10</span>, y <span class="op">=</span> <span class="num">20</span>;
+    <span class="fn">swap</span>(<span class="op">&amp;</span>x, <span class="op">&amp;</span>y);
+    <span class="fn">printf</span>(<span class="str">"x=%d y=%d\n"</span>, x, y);  <span class="cmt">// x=20 y=10</span>
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="cmt">// Return sum</span>
+<span class="typ">int</span> <span class="fn">add</span>(<span class="typ">int</span> a, <span class="typ">int</span> b) {
+    <span class="kw">return</span> a <span class="op">+</span> b;
+}
+
+<span class="cmt">// Return average of array</span>
+<span class="typ">float</span> <span class="fn">average</span>(<span class="typ">int</span> arr[], <span class="typ">int</span> n) {
+    <span class="typ">int</span> sum <span class="op">=</span> <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="typ">int</span> i<span class="op">=</span><span class="num">0</span>; i<span class="op">&lt;</span>n; i<span class="op">++</span>) sum <span class="op">+=</span> arr[i];
+    <span class="kw">return</span> (<span class="typ">float</span>)sum <span class="op">/</span> n;
+}
+
+<span class="cmt">// Recursive factorial</span>
+<span class="typ">int</span> <span class="fn">factorial</span>(<span class="typ">int</span> n) {
+    <span class="kw">if</span> (n <span class="op">&lt;=</span> <span class="num">1</span>) <span class="kw">return</span> <span class="num">1</span>;     <span class="cmt">// base case</span>
+    <span class="kw">return</span> n <span class="op">*</span> <span class="fn">factorial</span>(n <span class="op">-</span> <span class="num">1</span>); <span class="cmt">// recursive call</span>
+}
+
+<span class="cmt">// Swap using pointers (pass by reference)</span>
+<span class="typ">void</span> <span class="fn">swap</span>(<span class="typ">int</span> <span class="op">*</span>a, <span class="typ">int</span> <span class="op">*</span>b) {
+    <span class="typ">int</span> temp <span class="op">=</span> <span class="op">*</span>a;
+    <span class="op">*</span>a <span class="op">=</span> <span class="op">*</span>b;
+    <span class="op">*</span>b <span class="op">=</span> temp;
+}</pre>
+      </div>
+
+      <div class="output-block"><div class="output-header">▶ Output</div><pre>5+3 = 8
+Average = 79.60
+5! = 120
+x=20 y=10</pre></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 12. POINTERS -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="pointers">
+      <div class="section-header">
+        <div class="section-num">12</div>
+        <h2>Pointers</h2>
+      </div>
+
+      <p>A pointer is a variable that stores the <strong>memory address</strong> of another variable. Pointers are one of the most powerful — and tricky — features of C.</p>
+
+      <div class="diagram-wrap">
+        <div class="diagram-title">Pointer — Memory Address Diagram</div>
+        <svg width="100%" viewBox="0 0 680 190" role="img" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="pa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <!-- Variable 'x' -->
+          <rect x="80" y="60" width="130" height="70" rx="10" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="2"/>
+          <text x="145" y="50" text-anchor="middle" font-size="12" fill="#6B7280">Address: 1000</text>
+          <text x="145" y="85" text-anchor="middle" font-size="13" font-weight="600" fill="#6B7280">Variable x</text>
+          <text x="145" y="108" text-anchor="middle" font-size="22" font-weight="700" fill="#1B4F8A">42</text>
+          <text x="145" y="125" text-anchor="middle" font-size="11" fill="#2D8CCA">int x = 42</text>
+          <text x="145" y="145" text-anchor="middle" font-size="11" fill="#6B7280">value stored here</text>
+
+          <!-- Pointer 'p' -->
+          <rect x="420" y="60" width="170" height="70" rx="10" fill="#FEF3C7" stroke="#EA7700" stroke-width="2"/>
+          <text x="505" y="50" text-anchor="middle" font-size="12" fill="#6B7280">Address: 2000</text>
+          <text x="505" y="85" text-anchor="middle" font-size="13" font-weight="600" fill="#6B7280">Pointer p</text>
+          <text x="505" y="108" text-anchor="middle" font-size="20" font-weight="700" fill="#92400E">1000</text>
+          <text x="505" y="125" text-anchor="middle" font-size="11" fill="#EA7700">int *p = &amp;x</text>
+          <text x="505" y="145" text-anchor="middle" font-size="11" fill="#6B7280">stores x's address</text>
+
+          <!-- Arrow from pointer to variable -->
+          <line x1="418" y1="95" x2="213" y2="95" stroke="#DC2626" stroke-width="2.5" marker-end="url(#pa)"/>
+          <text x="315" y="82" text-anchor="middle" font-size="12" fill="#DC2626" font-weight="600">*p = 42 (dereference)</text>
+          <text x="315" y="96" text-anchor="middle" font-size="11" fill="#DC2626">p points to x</text>
+
+          <!-- Labels bottom -->
+          <text x="145" y="175" text-anchor="middle" font-size="11" fill="#1B4F8A">&amp;x → address of x</text>
+          <text x="505" y="175" text-anchor="middle" font-size="11" fill="#EA7700">*p → value at address</text>
+        </svg>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Pointers — Core Concepts</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="typ">int</span> x <span class="op">=</span> <span class="num">42</span>;
+    <span class="typ">int</span> <span class="op">*</span>p;        <span class="cmt">// declare pointer to int</span>
+    p <span class="op">=</span> <span class="op">&amp;</span>x;        <span class="cmt">// p holds the address of x</span>
+
+    <span class="fn">printf</span>(<span class="str">"Value of x   : %d\n"</span>, x);
+    <span class="fn">printf</span>(<span class="str">"Address of x : %p\n"</span>, (<span class="typ">void</span><span class="op">*</span>)<span class="op">&amp;</span>x);
+    <span class="fn">printf</span>(<span class="str">"p holds      : %p\n"</span>, (<span class="typ">void</span><span class="op">*</span>)p);
+    <span class="fn">printf</span>(<span class="str">"*p (deref)   : %d\n"</span>, <span class="op">*</span>p);   <span class="cmt">// 42</span>
+
+    <span class="op">*</span>p <span class="op">=</span> <span class="num">100</span>;   <span class="cmt">// modify x through pointer</span>
+    <span class="fn">printf</span>(<span class="str">"x is now     : %d\n"</span>, x);   <span class="cmt">// 100!</span>
+
+    <span class="cmt">// Pointer arithmetic</span>
+    <span class="typ">int</span> arr[] <span class="op">=</span> {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>};
+    <span class="typ">int</span> <span class="op">*</span>ptr <span class="op">=</span> arr;       <span class="cmt">// arr decays to &arr[0]</span>
+    <span class="fn">printf</span>(<span class="str">"arr[0]=%d, arr[1]=%d, arr[2]=%d\n"</span>,
+           <span class="op">*</span>ptr, <span class="op">*</span>(ptr<span class="op">+</span><span class="num">1</span>), <span class="op">*</span>(ptr<span class="op">+</span><span class="num">2</span>));
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+
+      <div class="output-block"><div class="output-header">▶ Output</div><pre>Value of x   : 42
+Address of x : 0x7fff5fbff8ac
+p holds      : 0x7fff5fbff8ac
+*p (deref)   : 42
+x is now     : 100
+arr[0]=10, arr[1]=20, arr[2]=30</pre></div>
+
+      <div class="info-box danger">
+        <span class="info-icon">🚫</span>
+        <p><strong>Never use an uninitialized pointer!</strong> Always assign a pointer before dereferencing it. Use <code>NULL</code> to mark an unused pointer: <code>int *p = NULL;</code> and check <code>if (p != NULL)</code> before use.</p>
+      </div>
+
+      <h3>Pointer Operators Summary</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>&amp;</code></td><td>Address-of</td><td><code>&amp;x</code></td><td>Get memory address of x</td></tr>
+            <tr><td><code>*</code></td><td>Dereference</td><td><code>*p</code></td><td>Get value at address p</td></tr>
+            <tr><td><code>*</code> (declare)</td><td>Pointer type</td><td><code>int *p</code></td><td>p is a pointer to int</td></tr>
+            <tr><td><code>ptr++</code></td><td>Increment</td><td><code>ptr++</code></td><td>Move to next element (by sizeof type)</td></tr>
+            <tr><td><code>ptr+n</code></td><td>Arithmetic</td><td><code>*(ptr+2)</code></td><td>Access 3rd element</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 13. STRUCTURES -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="structures">
+      <div class="section-header">
+        <div class="section-num">13</div>
+        <h2>Structures</h2>
+      </div>
+
+      <p>A <code>struct</code> groups related data of <strong>different types</strong> under one name — the foundation of user-defined data types in C.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Structures — Student Record</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="inc">#include</span> <span class="str">&lt;string.h&gt;</span>
+
+<span class="cmt">// Define structure (blueprint)</span>
+<span class="kw">struct</span> Student {
+    <span class="typ">int</span>   rollno;
+    <span class="typ">char</span>  name[<span class="num">50</span>];
+    <span class="typ">float</span> marks;
+    <span class="typ">char</span>  grade;
+};
+
+<span class="cmt">// typedef — avoids writing "struct" every time</span>
+<span class="kw">typedef</span> <span class="kw">struct</span> Student Student;
+
+<span class="typ">void</span> <span class="fn">printStudent</span>(Student s);   <span class="cmt">// prototype</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="cmt">// Create and initialize struct variable</span>
+    Student s1 <span class="op">=</span> {<span class="num">101</span>, <span class="str">"Priya Sharma"</span>, <span class="num">92.5f</span>, <span class="str">'A'</span>};
+
+    <span class="cmt">// Access members with dot operator</span>
+    <span class="fn">printf</span>(<span class="str">"Roll No: %d\n"</span>, s1.rollno);
+    <span class="fn">printf</span>(<span class="str">"Name   : %s\n"</span>, s1.name);
+    <span class="fn">printf</span>(<span class="str">"Marks  : %.1f\n"</span>, s1.marks);
+
+    <span class="cmt">// Modify a field</span>
+    s1.marks <span class="op">=</span> <span class="num">95.0f</span>;
+
+    <span class="cmt">// Array of structures</span>
+    Student class_a[<span class="num">3</span>] <span class="op">=</span> {
+        {<span class="num">101</span>, <span class="str">"Alice"</span>, <span class="num">88.0</span>, <span class="str">'A'</span>},
+        {<span class="num">102</span>, <span class="str">"Bob"</span>,   <span class="num">72.5</span>, <span class="str">'B'</span>},
+        {<span class="num">103</span>, <span class="str">"Carol"</span>, <span class="num">95.0</span>, <span class="str">'A'</span>}
+    };
+
+    <span class="fn">printf</span>(<span class="str">"\n--- Class Report ---\n"</span>);
+    <span class="kw">for</span> (<span class="typ">int</span> i<span class="op">=</span><span class="num">0</span>; i<span class="op">&lt;</span><span class="num">3</span>; i<span class="op">++</span>)
+        <span class="fn">printStudent</span>(class_a[i]);
+
+    <span class="cmt">// Pointer to struct — use arrow operator</span>
+    Student <span class="op">*</span>sp <span class="op">=</span> <span class="op">&amp;</span>s1;
+    <span class="fn">printf</span>(<span class="str">"\nVia pointer: %s — %.1f\n"</span>, sp<span class="op">-&gt;</span>name, sp<span class="op">-&gt;</span>marks);
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="typ">void</span> <span class="fn">printStudent</span>(Student s) {
+    <span class="fn">printf</span>(<span class="str">"[%d] %-12s  %.1f  %c\n"</span>,
+           s.rollno, s.name, s.marks, s.grade);
+}</pre>
+      </div>
+
+      <div class="output-block"><div class="output-header">▶ Output</div><pre>Roll No: 101
+Name   : Priya Sharma
+Marks  : 92.5
+
+--- Class Report ---
+[101] Alice        88.0  A
+[102] Bob          72.5  B
+[103] Carol        95.0  A
+
+Via pointer: Priya Sharma — 95.0</pre></div>
+
+      <div class="info-box note">
+        <span class="info-icon">📌</span>
+        <p>Use <strong>dot operator (<code>.</code>)</strong> to access struct members directly. Use <strong>arrow operator (<code>-&gt;</code>)</strong> when accessing via a pointer: <code>ptr-&gt;member</code> is shorthand for <code>(*ptr).member</code>.</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- 14. FILE I/O -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="section" id="fileio">
+      <div class="section-header">
+        <div class="section-num">14</div>
+        <h2>File Input / Output</h2>
+      </div>
+
+      <p>C can read from and write to files using <code>FILE</code> pointers from <code>&lt;stdio.h&gt;</code>. Always close files after use!</p>
+
+      <div class="diagram-wrap">
+        <div class="diagram-title">File I/O Workflow</div>
+        <svg width="100%" viewBox="0 0 680 120" role="img" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="fia" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#2D8CCA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <!-- Step 1 -->
+          <rect x="30" y="35" width="120" height="50" rx="8" fill="#EEF6FF" stroke="#2D8CCA" stroke-width="1.5"/>
+          <text x="90" y="57" text-anchor="middle" font-size="12" font-weight="600" fill="#1B4F8A">① Open File</text>
+          <text x="90" y="73" text-anchor="middle" font-size="11" fill="#6B7280">fopen()</text>
+          <line x1="150" y1="60" x2="178" y2="60" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#fia)"/>
+
+          <!-- Step 2 -->
+          <rect x="180" y="35" width="130" height="50" rx="8" fill="#F0FDF4" stroke="#1A7A4A" stroke-width="1.5"/>
+          <text x="245" y="57" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">② Read / Write</text>
+          <text x="245" y="73" text-anchor="middle" font-size="11" fill="#6B7280">fprintf / fscanf</text>
+          <line x1="310" y1="60" x2="338" y2="60" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#fia)"/>
+
+          <!-- Step 3 -->
+          <rect x="340" y="35" width="120" height="50" rx="8" fill="#FFF7ED" stroke="#EA7700" stroke-width="1.5"/>
+          <text x="400" y="57" text-anchor="middle" font-size="12" font-weight="600" fill="#9A3412">③ Check Errors</text>
+          <text x="400" y="73" text-anchor="middle" font-size="11" fill="#6B7280">NULL check</text>
+          <line x1="460" y1="60" x2="488" y2="60" stroke="#2D8CCA" stroke-width="1.5" marker-end="url(#fia)"/>
+
+          <!-- Step 4 -->
+          <rect x="490" y="35" width="120" height="50" rx="8" fill="#0D1B2A" stroke="#2D8CCA" stroke-width="1.5"/>
+          <text x="550" y="57" text-anchor="middle" font-size="12" font-weight="600" fill="white">④ Close File</text>
+          <text x="550" y="73" text-anchor="middle" font-size="11" fill="#2D8CCA">fclose()</text>
+
+          <!-- Mode table -->
+          <text x="90" y="110" text-anchor="middle" font-size="11" fill="#2D8CCA">"r" read</text>
+          <text x="245" y="110" text-anchor="middle" font-size="11" fill="#1A7A4A">"w" write/create</text>
+          <text x="400" y="110" text-anchor="middle" font-size="11" fill="#EA7700">"a" append</text>
+          <text x="550" y="110" text-anchor="middle" font-size="11" fill="#7C3AED">"rb"/"wb" binary</text>
+        </svg>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">Writing to & Reading from a File</span></div>
+        <pre><span class="inc">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="inc">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="typ">FILE</span> <span class="op">*</span>fp;
+
+    <span class="cmt">// ── WRITE to file ──</span>
+    fp <span class="op">=</span> <span class="fn">fopen</span>(<span class="str">"students.txt"</span>, <span class="str">"w"</span>);
+    <span class="kw">if</span> (fp <span class="op">==</span> <span class="kw">NULL</span>) {
+        <span class="fn">printf</span>(<span class="str">"Error opening file!\n"</span>);
+        <span class="fn">exit</span>(<span class="num">1</span>);
+    }
+    <span class="fn">fprintf</span>(fp, <span class="str">"Name: Alice\nMarks: 92.5\n"</span>);
+    <span class="fn">fprintf</span>(fp, <span class="str">"Name: Bob\nMarks: 78.0\n"</span>);
+    <span class="fn">fclose</span>(fp);
+    <span class="fn">printf</span>(<span class="str">"Data written to students.txt\n"</span>);
+
+    <span class="cmt">// ── READ from file ──</span>
+    fp <span class="op">=</span> <span class="fn">fopen</span>(<span class="str">"students.txt"</span>, <span class="str">"r"</span>);
+    <span class="kw">if</span> (fp <span class="op">==</span> <span class="kw">NULL</span>) {
+        <span class="fn">printf</span>(<span class="str">"Cannot open file!\n"</span>);
+        <span class="fn">exit</span>(<span class="num">1</span>);
+    }
+
+    <span class="typ">char</span> line[<span class="num">100</span>];
+    <span class="fn">printf</span>(<span class="str">"\n--- Reading File ---\n"</span>);
+    <span class="kw">while</span> (<span class="fn">fgets</span>(line, <span class="kw">sizeof</span>(line), fp) <span class="op">!=</span> <span class="kw">NULL</span>) {
+        <span class="fn">printf</span>(<span class="str">"%s"</span>, line);
+    }
+    <span class="fn">fclose</span>(fp);
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      </div>
+
+      <div class="output-block"><div class="output-header">▶ Output</div><pre>Data written to students.txt
+
+--- Reading File ---
+Name: Alice
+Marks: 92.5
+Name: Bob
+Marks: 78.0</pre></div>
+
+      <h3>File Functions Quick Reference</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Function</th><th>Purpose</th><th>Returns</th></tr></thead>
+          <tbody>
+            <tr><td><code>fopen(name, mode)</code></td><td>Open a file</td><td>FILE* or NULL on error</td></tr>
+            <tr><td><code>fclose(fp)</code></td><td>Close file and flush</td><td>0 (success) or EOF</td></tr>
+            <tr><td><code>fprintf(fp, fmt, ...)</code></td><td>Write formatted text</td><td>chars written</td></tr>
+            <tr><td><code>fscanf(fp, fmt, ...)</code></td><td>Read formatted data</td><td>items read</td></tr>
+            <tr><td><code>fgets(buf, n, fp)</code></td><td>Read a line</td><td>buf or NULL (EOF)</td></tr>
+            <tr><td><code>fputs(str, fp)</code></td><td>Write a string</td><td>non-negative or EOF</td></tr>
+            <tr><td><code>fgetc(fp)</code></td><td>Read one character</td><td>char or EOF</td></tr>
+            <tr><td><code>fputc(c, fp)</code></td><td>Write one character</td><td>char or EOF</td></tr>
+            <tr><td><code>feof(fp)</code></td><td>Check end-of-file</td><td>non-zero if at EOF</td></tr>
+            <tr><td><code>fseek(fp, off, from)</code></td><td>Move file pointer</td><td>0 on success</td></tr>
+            <tr><td><code>ftell(fp)</code></td><td>Current file position</td><td>long offset</td></tr>
+            <tr><td><code>rewind(fp)</code></td><td>Reset to beginning</td><td>void</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quick Summary Card -->
+      <div style="background: linear-gradient(135deg, #0D1B2A, #1B4F8A); border-radius: 14px; padding: 2rem; margin-top: 2.5rem; color: white;">
+        <div style="font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #E8A020; font-weight: 600; margin-bottom: 0.75rem;">ScholarNest — Quick Summary</div>
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 1rem; color: white;">C Programming — Key Takeaways</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 13.5px; color: rgba(255,255,255,0.85);">
+          <div>✅ C is compiled, fast, and low-level</div>
+          <div>✅ Every program starts from <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;">main()</code></div>
+          <div>✅ Statically typed — declare before use</div>
+          <div>✅ Arrays are zero-indexed</div>
+          <div>✅ Pointers store memory addresses (<code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;">&amp;</code> and <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;">*</code>)</div>
+          <div>✅ struct groups different data types</div>
+          <div>✅ Always <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;">fclose()</code> after file I/O</div>
+          <div>✅ Use <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;">return 0;</code> at end of main</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Highlight active sidebar link on scroll
+const sections = document.querySelectorAll('.section');
+const links = document.querySelectorAll('.sidebar-link');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      links.forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('href') === '#' + id) l.classList.add('active');
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// Smooth scroll
+document.querySelectorAll('.sidebar-link').forEach(link => {
+  link.addEventListener('click', e => {
+    const href = link.getAttribute('href');
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
